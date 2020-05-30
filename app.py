@@ -16,8 +16,9 @@ def main():
 	# Read the file to a dataframe and make the date column the index
 	df = pd.read_csv(filename, index_col=1)
 	
-	# Change index to datetime
-	#df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+	# Change date column to datetime
+	#df.loc[:, 'Date'] = pd.to_datetime(df.loc[:, 'Date'], infer_datetime_format=True)
+	#print(df['Date'])
 
 	# Build plot
 	fig = plt.figure()
@@ -49,6 +50,14 @@ def main():
 	# Turn on the major and minor grid lines for x-axis
 	ax.xaxis.grid(True, color='lightsteelblue', which='minor', linestyle='-', alpha=0.5)
 	ax.xaxis.grid(True, color='lightsteelblue', which='major', linestyle='-', alpha=0.8)
+
+	# Create secondary x-axis
+	ax2 = ax.twiny()
+
+	newlabel = list(df['Date'])
+	newlabel = newlabel[::28]
+	ax2.set_xticklabels(newlabel)
+	plt.xticks(rotation=60)
 
 	# Label axes and title
 	plt.title('2019 nCoV Daily Cases in South Carolina', color='midnightblue')
