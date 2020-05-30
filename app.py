@@ -14,10 +14,10 @@ def main():
 	filename = 'COVID-19 South Carolina Celeration Charts - RAW DATA.csv'
 
 	# Read the file to a dataframe and make the date column the index
-	df = pd.read_csv(filename, index_col=0)
+	df = pd.read_csv(filename, index_col=1)
 	
 	# Change index to datetime
-	df.index = pd.to_datetime(df.index, infer_datetime_format=True)
+	#df.index = pd.to_datetime(df.index, infer_datetime_format=True)
 
 	# Build plot
 	fig = plt.figure()
@@ -34,17 +34,13 @@ def main():
 	ax.yaxis.grid(True, color='lightsteelblue', which='minor', linestyle='-', alpha=0.5)
 	ax.yaxis.grid(True, color='lightsteelblue', which='major', linestyle='-', alpha=0.8)
 
-	# Replace NaN with zeros
-	#df = df.fillna(0)
-	#df = df.replace(to_replace=0, value=1)
-	print(df)	
-
 	# Set the range for the x-axis
-	ax.set_xlim([datetime.date(2020, 3, 1), datetime.date(2020, 7, 19)])
-	#ax.set_xlim(pd.Timestamp('2020-03-01'), pd.Timestamp('2020-07-19'))
+	#ax.set_xlim([datetime.date(2020, 3, 1), datetime.date(2020, 7, 19)])
+	ax.set_xlim([0, 140])
 
 	# Set x-labels
-	ax.set_xticklabels(np.arange(0, 141, 7))
+	#ax.set_xticklabels(np.arange(0, 141, 7))
+	
 
 	# Set the location for x-axis ticks
 	ax.xaxis.set_minor_locator(MultipleLocator(1))
