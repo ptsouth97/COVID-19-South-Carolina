@@ -26,72 +26,6 @@ def main():
 	return
 
 
-def moving_average(x, y):
-	''' creates a moving average'''
-
-	df = pd.DataFrame(data=y, index=x)
-	
-	rolling = df[0].rolling(window=6)
-	rolling_median = rolling.median()
-
-	plt.plot(x, y, marker='.')
-	plt.yscale('log')
-	rolling_median.plot(color='red')
-	#plt.show()
-
-	
-	return
-
-
-def prep_data(original_df, stop_date):
-	''' Takes dataframe prepares data for regression and returns the modified dataframe'''
-
-	df = original_df
-	
-	# Get the current date, or use supplied stop date
-	if stop_date == None:
-		date = df.index[-1]
-
-	else:
-		date = stop_date
-	print(date)
-	print(type(date))
-	# Replace date slashed with dashed
-	date = date.replace('/', '-')
-
-	# Replace NaN with zeros
-	df = df.fillna(0)
-
-	# Change index to datetime
-	df.index = pd.to_datetime(df.index, infer_datetime_format=True) #format='%m/%-d/%y')
-
-	num = len(df)
-
-	if df.iloc[num-1, 0] >= 30:
-
-		# filter out row where cumulative cases is greater than 30
-		greater_30 = df['Cumulative cases']>30
-		df = df[greater_30]
-
-	# Check if df is now empty
-	if df.empty == True:
-		return 'no_df', 'no_celeration', 'no_date'
-
-	# replace 0's in data frame with 1's to prevent errors
-	df = df.replace(to_replace=0, value=1)
-
-	# Get rid of any negative numbers with absolute value
-	df = df.apply(abs)
-
-	# Filter dates, if requested
-	if stop_date != None:
-		mask = df.index <= stop_date
-		df = df.loc[mask]
-		num = len(df)
-	#print(df)
-
-	return df, date
-
 
 def regression(df, date, multi_trend):
 	''' performs linear regression'''
@@ -129,26 +63,45 @@ def regression(df, date, multi_trend):
 			days = (end - start).days
 			shift = 140 - days
 	'''
+	df = df.fillna(1)
+	df = df.replace(to_replace=0, value=1)
+
 	# Create X and Y prediction spaces
 	num = len(df)
 	X = np.arange(0, num).reshape(-1, 1)
 	Y = df.iloc[0:num, 1].values.reshape(-1, 1)
+	prediction_space = np.linspace(0, 141).reshape(-1,1)
 
-	print(X)
-	print(Y)
-	'''
-			# Get the moving averages
-			# ma = moving_average(X, Y)
-	'''
+	#print('X')
+	#print(X)
+	#print('Y')
+	#print(Y)
+
 	# Perform regression	
 	linear_regressor = LinearRegression()
 	linear_regressor.fit(X, np.log(Y))
+	y_pred = linear_regressor.predict(prediction_space)
+	#plt.plot(X, Y)
+	#plt.plot(prediction_space, y_pred)
+	#plt.show()
+
+	#print(y_pred)
+	#print(type(y_pred))
+	#print(len(y_pred))
+
+
+	#df['y_pred'] = y_pred
+	y_pred = pd.DataFrame(y_pred)
+	#df = pd.concat([df, df1], ignore_index=True, axis=1)
+
 
 	# Get linear regression parameters
-	m = linear_regressor.coef_
-	b = linear_regressor.intercept_
-	print(m)
-	print(b)
+	#m = linear_regressor.coef_
+	#b = linear_regressor.intercept_
+	#print(m)
+	#print(b)
+
+	
 	'''
 			# Initialize and fill data frame for regression results
 			values = []
@@ -201,7 +154,7 @@ def regression(df, date, multi_trend):
 		else:
 			break
 	'''
-	return #original_df, celeration
+	return y_pred  #original_df, celeration
 
 
 if __name__ == '__main__':
