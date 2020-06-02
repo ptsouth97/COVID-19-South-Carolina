@@ -72,10 +72,10 @@ def regression(df, date, multi_trend):
 	Y = df.iloc[0:num, 1].values.reshape(-1, 1)
 	prediction_space = np.linspace(0, 141).reshape(-1,1)
 
-	#print('X')
-	#print(X)
-	#print('Y')
-	#print(Y)
+	print('X')
+	print(X)
+	print('Y')
+	print(Y)
 
 	# Perform regression	
 	linear_regressor = LinearRegression()
@@ -96,11 +96,18 @@ def regression(df, date, multi_trend):
 
 
 	# Get linear regression parameters
-	#m = linear_regressor.coef_
-	#b = linear_regressor.intercept_
+	m = linear_regressor.coef_
+	b = linear_regressor.intercept_
 	#print(m)
 	#print(b)
 
+	values = []
+
+	for value in range(1, 140):
+		values.append(math.exp(m*value + b))
+
+	print('VALUES')
+	print(values)
 	
 	'''
 			# Initialize and fill data frame for regression results

@@ -18,7 +18,7 @@ def main():
 	df = pd.read_csv(filename, index_col=1)
 
 	y_pred = fit_curve.regression(df, None, None)
-	print(y_pred)
+	#print(y_pred)
 
 	# Change date column to datetime
 	#df.loc[:, 'Date'] = pd.to_datetime(df.loc[:, 'Date'], infer_datetime_format=True)
