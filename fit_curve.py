@@ -63,6 +63,16 @@ def regression(df, date, multi_trend):
 			days = (end - start).days
 			shift = 140 - days
 	'''
+
+	# Get the date range of the trend to be analyzed
+	start_day = 13
+	end_day = 32
+	celeration_days = end_day - start_day
+	shift = start_day
+
+	# Slice the dataframe based on those dates
+	df = df.iloc[13:33, :]
+
 	df = df.fillna(1)
 	df = df.replace(to_replace=0, value=1)
 
@@ -70,45 +80,28 @@ def regression(df, date, multi_trend):
 	num = len(df)
 	X = np.arange(0, num).reshape(-1, 1)
 	Y = df.iloc[0:num, 1].values.reshape(-1, 1)
-	prediction_space = np.linspace(0, 141).reshape(-1,1)
-
-	print('X')
-	print(X)
-	print('Y')
-	print(Y)
 
 	# Perform regression	
 	linear_regressor = LinearRegression()
 	linear_regressor.fit(X, np.log(Y))
-	y_pred = linear_regressor.predict(prediction_space)
-	#plt.plot(X, Y)
-	#plt.plot(prediction_space, y_pred)
-	#plt.show()
-
-	#print(y_pred)
-	#print(type(y_pred))
-	#print(len(y_pred))
-
-
-	#df['y_pred'] = y_pred
-	y_pred = pd.DataFrame(y_pred)
-	#df = pd.concat([df, df1], ignore_index=True, axis=1)
-
 
 	# Get linear regression parameters
 	m = linear_regressor.coef_
 	b = linear_regressor.intercept_
-	#print(m)
-	#print(b)
 
 	values = []
 
 	for value in range(1, 140):
-		values.append(math.exp(m*value + b))
+		values.append(math.exp(m*(value-shift) + b))
 
-	print('VALUES')
-	print(values)
+	values = pd.DataFrame(values)
 	
+
+	# Create a data frame the size of the celeration chart and fill it with the calculated values
+	#predictions = pd.DataFrame(index=[np.arange(1, celeration_days)], data=values)
+	
+
+
 	'''
 			# Initialize and fill data frame for regression results
 			values = []
@@ -161,7 +154,7 @@ def regression(df, date, multi_trend):
 		else:
 			break
 	'''
-	return y_pred  #original_df, celeration
+	return values #y_pred  #original_df, celeration
 
 
 if __name__ == '__main__':
