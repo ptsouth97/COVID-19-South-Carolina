@@ -71,7 +71,7 @@ def regression(df, date, multi_trend):
 	shift = start_day
 
 	# Slice the dataframe based on those dates
-	df = df.iloc[13:33, :]
+	df = df.iloc[start_day:end_day+1, :]
 
 	df = df.fillna(1)
 	df = df.replace(to_replace=0, value=1)
@@ -91,14 +91,16 @@ def regression(df, date, multi_trend):
 
 	values = []
 
-	for value in range(1, 140):
+	for value in range(start_day, end_day+1):
 		values.append(math.exp(m*(value-shift) + b))
 
-	values = pd.DataFrame(values)
-	
+	values = pd.DataFrame(values, index=np.arange(start_day,(end_day+1)))
+	#print(values)	
+
 
 	# Create a data frame the size of the celeration chart and fill it with the calculated values
-	#predictions = pd.DataFrame(index=[np.arange(1, celeration_days)], data=values)
+	#predictions = pd.DataFrame(index=np.arange(0, 141), data=None)
+	#print(predictions)
 	
 
 

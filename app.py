@@ -31,7 +31,7 @@ def main():
 	# Plot data
 	ax1 = df['New Cases (SC)'].plot(kind='line', color='k', marker='.', linewidth=1, logy=True, legend=True)
 	ax1 = df['Daily deaths'].plot(kind='line', color='r', marker='x', linewidth=1, logy=True, legend=True)
-	ax1 = y_pred[0].plot(kind='line')
+	ax1 = y_pred[0].plot(kind='line', linestyle='dotted', color='k')
 
 	# Set the range for the y-axis
 	ax1.set_ylim([1, 1000000])
