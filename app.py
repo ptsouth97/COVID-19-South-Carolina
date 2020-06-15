@@ -17,7 +17,7 @@ def main():
 	# Read the file to a dataframe and make the date column the index
 	df = pd.read_csv(filename, index_col=1)
 
-	y_pred, ci = fit_curve.regression(df, None, None)
+	y_pred, uci, lci = fit_curve.regression(df, None, None)
 	#print(y_pred)
 
 	# Change date column to datetime
@@ -32,7 +32,8 @@ def main():
 	ax1 = df['New Cases (SC)'].plot(kind='line', color='k', marker='.', linewidth=1, logy=True, legend=True)
 	ax1 = df['Daily deaths'].plot(kind='line', color='r', marker='x', linewidth=1, logy=True, legend=True)
 	ax1 = y_pred[0].plot(kind='line', color='k')
-	ax1 = ci[0].plot(kind='line', linestyle='dotted', color='k')
+	ax1 = uci[0].plot(kind='line', linestyle='dotted', color='k')
+	ax1 = lci[0].plot(kind='line', linestyle='dotted', color='k')
 
 	# Set the range for the y-axis
 	ax1.set_ylim([1, 1000000])

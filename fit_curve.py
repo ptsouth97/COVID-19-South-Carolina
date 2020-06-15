@@ -32,7 +32,8 @@ def regression(df, date, multi_trend):
 
 	# Initialize blank data frames
 	predictions = pd.DataFrame()
-	confidence_interval = pd.DataFrame()
+	upper_confidence_interval = pd.DataFrame()
+	lower_confidence_interval = pd.DataFrame()
 
 	while True:
 	
@@ -62,18 +63,22 @@ def regression(df, date, multi_trend):
 		b = linear_regressor.intercept_
 
 		values = []
-		ci = []
+		uci = []
+		lci = []
 
 		for value in range(start_day, end_day+1):
 			values.append(math.exp(m*(value-shift) + b))
-			ci.append(1.90 * math.exp(m*(value-shift) + b))
+			uci.append(1.90 * math.exp(m*(value-shift) + b))
+			lci.append(0.90 * math.exp(m*(value-shift) + b))
 
 		values = pd.DataFrame(values, index=np.arange(start_day,(end_day+1)))
-		ci = pd.DataFrame(ci, index=np.arange(start_day,(end_day+1)))
+		uci = pd.DataFrame(uci, index=np.arange(start_day,(end_day+1)))
+		lci = pd.DataFrame(lci, index=np.arange(start_day,(end_day+1)))
 		#print(ci)	
 
 		predictions = predictions.append(values, ignore_index=True)
-		confidence_interval = confidence_interval.append(ci, ignore_index=True)
+		upper_confidence_interval = upper_confidence_interval.append(uci, ignore_index=True)
+		lower_confidence_interval = lower_confidence_interval.append(lci, ignore_index=True)
 
 		#high_value = int(input('High value? '))
 		#high_day = int(input('High day? '))
@@ -87,7 +92,7 @@ def regression(df, date, multi_trend):
 	#predictions = pd.DataFrame(index=np.arange(0, 141), data=None)
 	#print(predictions)
 	
-	return predictions, confidence_interval #y_pred  #original_df, celeration
+	return predictions, upper_confidence_interval, lower_confidence_interval #y_pred  #original_df, celeration
 
 
 if __name__ == '__main__':
