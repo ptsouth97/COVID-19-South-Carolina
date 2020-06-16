@@ -15,7 +15,7 @@ def main():
 	filename = 'COVID-19 South Carolina Celeration Charts - RAW DATA.csv'
 
 	# Read the file to a dataframe and make the date column the index
-	df = pd.read_csv(filename, index_col=1)
+	df = pd.read_csv(filename, index_col=0)
 
 	y_pred, uci, lci = fit_curve.regression(df, None, None)
 	#print(y_pred)

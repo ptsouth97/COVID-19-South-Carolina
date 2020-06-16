@@ -52,8 +52,8 @@ def regression(df, date, multi_trend):
 		# Create X and Y prediction spaces
 		num = len(current_df)
 		X = np.arange(0, num).reshape(-1, 1)
-		Y = current_df.iloc[0:num, 1].values.reshape(-1, 1)
-		
+		Y = current_df.iloc[0:num, 2].values.reshape(-1, 1)
+
 		# Perform regression	
 		linear_regressor = LinearRegression()
 		linear_regressor.fit(X, np.log(Y))
