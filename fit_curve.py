@@ -68,8 +68,8 @@ def regression(df, date, multi_trend):
 
 		for value in range(start_day, end_day+1):
 			values.append(math.exp(m*(value-shift) + b))
-			uci.append(1.90 * math.exp(m*(value-shift) + b))
-			lci.append(0.90 * math.exp(m*(value-shift) + b))
+			uci.append(1.9 * math.exp(m*(value-shift) + b))
+			lci.append(0.1 * math.exp(m*(value-shift) + b))
 
 		values = pd.DataFrame(values, index=np.arange(start_day,(end_day+1)))
 		uci = pd.DataFrame(uci, index=np.arange(start_day,(end_day+1)))
